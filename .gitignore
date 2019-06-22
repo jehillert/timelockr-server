@@ -24,7 +24,6 @@ GenFakeCredsAndData.js
 .vscode/
 .yarn-integrity
 /*.env
-_notes/
 bookmarks.json
 bower_components
 build/
@@ -37,7 +36,6 @@ launch.json
 lib-cov
 logs
 node_modules/
-NOTES/
 npm-debug.log*
 pids
 TIMELOCKR.code-workspace
