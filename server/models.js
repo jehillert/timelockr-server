@@ -1,7 +1,6 @@
 const db = require('../db');
 
 module.exports = {
-
   users: {
     get: user => db
       .query('SELECT * FROM users WHERE username = $1', user)
@@ -31,5 +30,4 @@ module.exports = {
       .query('UPDATE entries SET release_date = $1 WHERE entry_id = $2', params)
       .catch(err => console.log(err)),
   },
-
 };
