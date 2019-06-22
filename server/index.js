@@ -1,11 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-multi-spaces */
-/* eslint-disable no-multi-assign */
-/* eslint-disable key-spacing */
-/*
-! CHANGES REQUIRED:
-!   cookie: {... domain: 'localhost:8080',
- */
 require('dotenv').config();
 
 const chalk = require('chalk');
@@ -15,7 +7,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const Store = require('connect-pg-simple')(session);
-const router = require('./routes.js');
+// const router = require('./routes.js');
 
 // initialize server for appropriate dbms
 const app = module.exports = express();
