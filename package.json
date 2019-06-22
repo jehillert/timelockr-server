@@ -13,7 +13,8 @@
     "express": "^4.16.3",
     "express-session": "^1.16.2",
     "moment": "^2.24.0",
-    "pbkdf2-password": "^1.2.1"
+    "pbkdf2-password": "^1.2.1",
+    "pg-promise": "^8.7.2"
   },
   "engines": {
     "node": "9.8.0"
