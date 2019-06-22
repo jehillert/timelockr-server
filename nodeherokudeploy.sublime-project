@@ -1,0 +1,16 @@
+{
+  "folders":
+  [
+    {
+      "name": "TUTORIAL",
+      "path": "."
+    },
+  ],
+
+  "settings":
+  {
+    // BalancedThemes, SlateGrayCharcoalThemes, MonoThemes, GreenBrownThemes, BlueThemes, PurpleThemes, RedThemes
+    "color_scheme": "Packages/User/Themes/Acai_jeh.tmTheme",
+    "word_wrap": false
+  },
+}
