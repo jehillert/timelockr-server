@@ -44,7 +44,7 @@ app.use(session({
   },
 }));
 
-app.use('/api/db', router);
+// app.use('/api/db', router);
 // app.use(`/api/${process.env.PGDATABASE}`, router);
 
 app.set('port', PORT);
