@@ -11,7 +11,7 @@ const Store = require('connect-pg-simple')(session);
 
 // initialize server for appropriate dbms
 const app = module.exports = express();
-const PORT = process.env.API_HOST || 3000;
+const PORT = process.env.PORT || 3000;
 
 // session
 const options = {
