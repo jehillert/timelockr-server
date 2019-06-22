@@ -10,9 +10,8 @@ const session = require('express-session');
 const Store = require('connect-pg-simple')(session);
 // const router = require('./routes.js');
 
-// initialize server for appropriate dbms
 const app = module.exports = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;  // IS THIS REDUNDANT?
 
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
@@ -36,41 +35,32 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use(session({
-  secret: process.env.SESSION_SECRET,
   store: sessionStore,
+  secret: process.env.SESSION_SECRET,
   resave: true,
-  rolling: true,
+  // rolling: true,
   saveUninitialized: true,
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    domain: 'localhost:8080',
-    path: '/',
-    secure: false,
+    // domain: 'localhost:8080',
+    // path: '/',
+    // secure: false,
   },
 }));
 
-// app.use('/api/db', router);
-// app.use(`/api/${process.env.PGDATABASE}`, router);
+app.set('port', process.env.PORT);
+app.set('host', '0.0.0.0');
 
-app.set('port', PORT);
-// app.listen(app.get('port'), () => (
-//   console.log(`Node app started. Listening on port ${PORT}`)
-// ));
-app.listen(process.env.PORT || 4000, function(){
-    console.log('Your node js server is running');
-});
+app.listen(app.get('port'), app.get('host'), () => (
+  debug(`Node app started. Listening on port ${process.env.PORT}`)
+));
 
-  // app.use(session({
-  //   store: sessionStore,
-  //   secret: process.env.SESSION_SECRET,
-  //   resave: false,
-  //   saveUninitialized: true,
-  //   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
-  // }));
+/*
+  app.use('/api/db', router);
+  app.use(`/api/${process.env.PGDATABASE}`, router);
 
-  // app.set('port', process.env.PORT);
-  // app.set('host', '0.0.0.0');
-  //
-  // app.listen(app.get('port'), app.get('host'), () => (
-  //   debug(`Node app started. Listening on port ${process.env.PORT}`)
-  // ));
+  app.set('port', PORT);
+  app.listen(app.get('port'), () => (
+    console.log(`Node app started. Listening on port ${PORT}`)
+  });
+*/
