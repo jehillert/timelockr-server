@@ -11,7 +11,7 @@ const Store = require('connect-pg-simple')(session);
 const router = require('./routes.js');
 
 const app = module.exports = express();
-const PORT = process.env.PORT || 3000;  // IS THIS REDUNDANT?
+const SERVER_PORT = process.env.SERVER_PORT || 3000;  // IS THIS REDUNDANT?
 
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
@@ -51,17 +51,17 @@ app.use(session({
 app.use('/api/db', router);
 app.use(`/api/${process.env.PGDATABASE}`, router);
 
-app.set('port', process.env.PORT);
+app.set('port', process.env.SERVER_PORT);
 app.set('host', '0.0.0.0');
 
 app.listen(app.get('port'), app.get('host'), () => (
-  debug(`Node app started. Listening on port ${process.env.PORT}`)
+  debug(`Node app started. Listening on port ${process.env.SERVER_PORT}`)
 ));
 
 /*
 
-  app.set('port', PORT);
+  app.set('port', SERVER_PORT);
   app.listen(app.get('port'), () => (
-    console.log(`Node app started. Listening on port ${PORT}`)
+    console.log(`Node app started. Listening on port ${SERVER_PORT}`)
   });
 */
