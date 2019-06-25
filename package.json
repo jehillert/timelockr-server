@@ -17,7 +17,6 @@
   "scripts": {
     "start": "node server/index.js",
     "dev-server": "nodemon --ignore node_modules --inspect server",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.prod.js --progress",
     "deploy": "./deploy.sh"
   },
   "dependencies": {
