@@ -17,7 +17,6 @@
   "scripts": {
     "start": "node server/index.js",
     "dev-server": "nodemon --ignore node_modules --inspect server",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.prod.js --progress",
     "deploy": "./deploy.sh"
   },
   "dependencies": {
@@ -40,7 +39,6 @@
     "babel-core": "7.0.0-bridge.0"
   },
   "devDependencies": {
-    "dotenv-webpack": "^1.7.0",
     "faker": "^4.1.0",
     "nodemon": "^1.19.1",
     "rimraf": "^2.6.3"
