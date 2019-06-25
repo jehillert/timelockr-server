@@ -1,4 +1,3 @@
-/* eslint-disable key-spacing, import/order, import/no-extraneous-dependencies */
 const chalk = require('chalk');
 const Promise = require('bluebird');
 const debug = require('debug')(chalk.hex('#0a93ff').bgHex('#000000')('database:index'));

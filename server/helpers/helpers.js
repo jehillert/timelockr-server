@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 const chalk = require('chalk');
 const debug = require('debug')(chalk.hex('#ff7643').bgHex('#000000')('server:helpers'));
 const moment = require('moment');
@@ -14,7 +13,6 @@ const sortEntries = (unsorted) => {
   const todayInISO = new Date().toISOString();
   const present = moment().unix();
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const entry of unsorted) {
     const { content, description } = entry;
     const entryId = entry.entry_id;
