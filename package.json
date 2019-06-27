@@ -30,7 +30,6 @@
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "jquery": "^3.4.0",
     "moment": "^2.24.0",
     "pbkdf2-password": "^1.2.1",
     "pg-promise": "^8.6.5"

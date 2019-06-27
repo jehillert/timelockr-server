@@ -1,3 +1,22 @@
+/*
+  DESCRIPTION:
+    Public schema file for dev database.
+
+  PREREQUISITE:
+    All active sessions must be terminated
+
+  QUERY TO TERMINATE ACTIVE SESSIONS
+    SELECT
+        pg_terminate_backend(pid)
+    FROM
+        pg_stat_activity
+    WHERE
+        datname = 'db';
+
+  BASH COMMAND TO RUN THIS FILE:
+    psql service=tldb<schema.sql
+*/
+
 \c postgres jhillert
 DROP DATABASE IF EXISTS db;
 CREATE DATABASE db;
@@ -46,4 +65,3 @@ WITH (OIDS=FALSE);
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO PUBLIC
-"Dear Suddenlink Communications User, We are holding an anniversary celebration"
