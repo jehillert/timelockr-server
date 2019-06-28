@@ -1,5 +1,5 @@
 {
-  "name": "timelockr-server",
+  "name": "timelockr-server-demo",
   "version": "1.0.0",
   "description": "Make stuff inaccessible.",
   "main": "index.js",
@@ -12,12 +12,12 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/jehillert/timelockr-server"
+    "url": "https://github.com/jehillert/timelockr-server-demo"
   },
   "scripts": {
     "start": "node server/index.js",
     "dev-server": "nodemon --ignore node_modules --inspect server",
-    "deploy": "./deploy.sh"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -31,6 +31,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "moment": "^2.24.0",
+    "password-generator": "^2.1.0",
     "pbkdf2-password": "^1.2.1",
     "pg-promise": "^8.6.5"
   },
