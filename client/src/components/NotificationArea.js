@@ -1,0 +1,46 @@
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import { withSnackbar } from 'notistack';
+import styled from 'styled-components';
+
+const Area = styled.div`
+  background-color: yellow;
+  grid-area: gta-notification-area;
+  height: 5rem;
+  min-width: 5rem;
+`;
+
+function NotificationArea(props) {
+  const [data, updateData] = useState(false);
+  const endpoint = 'http://127.0.0.1:5000';
+  const { enqueueSnackbar } = props;
+
+  useEffect(() => {
+    // connect and listen...
+    const socket = io(endpoint);
+    socket.on('transmission', data => updateData(data));
+    socket.on('connection', data => updateData(data));
+  }, []);
+
+  useEffect(() => {
+    // display data received
+    if (data) {
+      enqueueSnackbar(data, {
+        anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'center',
+        },
+        variant: 'default',
+      })
+    }
+  }, [enqueueSnackbar, data]);
+  // }, [data]);
+  // });
+
+  return (
+    <Area />
+  );
+}
+
+// export default NotificationArea;
+export default withSnackbar(NotificationArea);

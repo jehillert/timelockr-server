@@ -1,53 +1,22 @@
 require('dotenv').config();
 
 const chalk = require('chalk');
-const debug = require('debug')(chalk.hex('#00FF40').bgHex('#000000')('server:app'));
+const debug = require('debug')('server');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
+const app = module.exports = express();  //needed b/c
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const session = require('express-session');
 const Store = require('connect-pg-simple')(session);
+const path = require('path');
 const router = require('./routes.js');
-// delete me
-const generatePassword = require('password-generator');
 
-const app = module.exports = express();
 const PORT = process.env.PORT || 5000;
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '/../client/build')));
-// app.use(express.static(path.join(__dirname, 'client/build'))); //tutorial
-// app.use(express.static(path.join(__dirname,"public"))); // jeh
-
-// Put all API endpoints under '/api'
-app.get('/api/passwords', (req, res) => {
-  const count = 5;
-
-  // Generate some passwords
-  const passwords = Array.from(Array(count).keys()).map(i =>
-    generatePassword(12, false)
-  )
-
-  // Return them as json
-  res.json(passwords);
-
-  console.log(`Sent ${count} passwords`);
-});
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/../client/build/index.html'));
-});
-// app.get('*', (req, res) => { //tutorial
-//   res.sendFile(path.join(__dirname+'/client/build/index.html'));
-//   res.sendFile(path.join(__dirname+'/../client/build/index.html'));
-// });
-// app.get('/', function(req, res) { //jeh
-//     res.sendFile(path.join(__dirname, 'index.html'));
-// });
-
 
 // session
 const options = {
@@ -59,7 +28,6 @@ const options = {
 };
 
 debug('Server Status: %o', 'DEVELOPMENT MODE - Debugging enabled...');
-debug(options);
 
 const sessionStore = new Store(options);
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -80,20 +48,17 @@ app.use(session({
   },
 }));
 
-app.use('/api/db', router);
-app.use(`/api/${process.env.PGDATABASE}`, router);
+io.on('connection', socket => {
+  socket.emit('connection', 'New client has connected. 🔥🔥🔥🔥🔥🔥🔥🔥');
+  socket.on('disconnect', () => console.log('Client disconnected.'));
+
+  app.use('/api/db', router);
+  app.use(`/api/${process.env.PGDATABASE}`, router);
+});
 
 app.set('port', process.env.PORT);
 app.set('host', '0.0.0.0');
 
-app.listen(app.get('port'), app.get('host'), () => (
-  debug(`Node app started. Listening on port ${process.env.PORT}`)
+server.listen(app.get('port'), app.get('host'), () => (
+  debug(`Node app started. Listening on port ${process.env.PORT || 5000}`)
 ));
-
-/*
-
-  app.set('port', PORT);
-  app.listen(app.get('port'), () => (
-    console.log(`Node app started. Listening on port ${PORT}`)
-  });
-*/

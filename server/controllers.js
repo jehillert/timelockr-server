@@ -57,10 +57,11 @@ module.exports = {
         .catch(error => debug('Error', error)),
 
     get: (req, res) => models.entries.get(req.query.username)
-        .tap(results => debug('\n\nEntries - UNSORTED:\n\n%O', results))
         .then(results => helpers.sortEntries(results))
         .then(results => res.send(results))
         .catch(error => debug('Error', error)),
+        // .tap(results => debug('\n\nRESPONSE:\n\n%O', res))
+        // .tap(results => debug('\n\nEntries - UNSORTED:\n\n%O', results))
 
     put: (req, res) => models.entries.update([
         req.body.data.releaseDate,

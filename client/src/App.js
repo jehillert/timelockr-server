@@ -1,64 +1,72 @@
-  import React, { Component } from 'react';
-  import './App.css';
+import React from 'react';
+import GlobalStyle from './style/GlobalStyle.js'
+import NotificationArea from './components/NotificationArea'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import styled from 'styled-components';
+import { SnackbarProvider } from 'notistack';
 
-  class App extends Component {
-    // Initialize state
-    state = { passwords: [] }
+const S = {};
 
-    // Fetch passwords after first mount
-    componentDidMount() {
-      this.getPasswords();
-    }
+S.Header = styled.div`
+background-color: red;
+  grid-area: gta-header;
+  height: 2rem;
+`;
 
-    getPasswords = () => {
-      // Get the passwords and store them in state
-      fetch('/api/passwords')
-        .then(res => res.json())
-        .then(passwords => this.setState({ passwords }));
-    }
+S.Sidebar1 = styled.div`
+  background-color: #75C4FF;
+  grid-area: gta-sidebar1;
+  height: 5rem;
+`;
 
-    render() {
-      const { passwords } = this.state;
+S.NotificationArea = styled(NotificationArea)`
+  background-color: yellow;
+  grid-area: gta-notification-area;
+  height: 5rem;
+  min-width: 5rem;
+`;
 
-      return (
-        <div className="App">
-          {/* Render the passwords if we have them */}
-          {passwords.length ? (
-            <div>
-              <h1>5 Passwords.</h1>
-              <ul className="passwords">
-                {/*
-                  Generally it's bad to use "index" as a key.
-                  It's ok for this example because there will always
-                  be the same number of passwords, and they never
-                  change positions in the array.
-                */}
-                {passwords.map((password, index) =>
-                  <li key={index}>
-                    {password}
-                  </li>
-                )}
-              </ul>
-              <button
-                className="more"
-                onClick={this.getPasswords}>
-                Get More
-              </button>
-            </div>
-          ) : (
-            // Render a helpful message otherwise
-            <div>
-              <h1>No passwords :(</h1>
-              <button
-                className="more"
-                onClick={this.getPasswords}>
-                Try Again?
-              </button>
-            </div>
-          )}
-        </div>
-      );
-    }
-  }
+S.Sidebar2 = styled.div`
+  background-color: #B1FCD9;
+  grid-area: gta-sidebar2;
+  height: 5rem;
+`;
 
-  export default App;
+S.Footer = styled.div`
+  background-color: #FFD19B;
+  grid-area: gta-footer;
+  height: 5rem;
+`;
+
+function App(props) {
+  return (
+    <div className={'grid-desktop'}>
+      <SnackbarProvider dense>
+      <CssBaseline />
+      <GlobalStyle />
+      <S.Header />
+      <S.Sidebar1 />
+      <S.NotificationArea />
+      <S.Sidebar2 />
+      <S.Footer />
+      </SnackbarProvider>
+    </div>
+  );
+}
+
+export default App;
+
+
+/*
+  enqueueSnackbar(data, {
+    anchorOrigin: {
+      vertical: 'top',
+      horizontal: 'center',
+    },
+    variant: 'default',
+    variant: 'success',
+    variant: 'error',
+    variant: 'warning',
+    variant: 'info',
+  });
+*/
