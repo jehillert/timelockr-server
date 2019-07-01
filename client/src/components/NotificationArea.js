@@ -4,10 +4,8 @@ import { withSnackbar } from 'notistack';
 import styled from 'styled-components';
 
 const Area = styled.div`
-  background-color: yellow;
-  grid-area: gta-notification-area;
-  height: 5rem;
-  min-width: 5rem;
+  width: 100vw;
+  height: 100vw;
 `;
 
 function NotificationArea(props) {

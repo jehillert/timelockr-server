@@ -4,6 +4,14 @@ const hasher = require('pbkdf2-password')();
 const helpers = require('./helpers/helpers');
 const models = require('./models');
 
+// const express = require('express');
+// const server = require('http').Server(app);
+// const io = require('socket.io')(server);
+// const session = require('express-session');
+// const Store = require('connect-pg-simple')(session);
+// const path = require('path');
+// const router = require('./routes.js');
+
 function deleteFromTable(req, res) {
   const params = helpers.getQueryParams(req);
   models.general

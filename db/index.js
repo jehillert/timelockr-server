@@ -1,9 +1,10 @@
 const chalk = require('chalk');
 const Promise = require('bluebird');
-const debug = require('debug')(chalk.hex('#0a93ff').bgHex('#000000')('database:index'));
+// const debug = require('debug')(chalk.hex('#0a93ff').bgHex('#000000')('database:index'));
+const debug = require('debug')('database:index');
 
 debug(chalk.bold.hex('#FF0000')(' DEVELOPMENT MODE '), chalk.inverse(' Debugging Enabled '));
-console.log(`__dirname in database index.js:     ${__dirname}`)
+// console.log(`__dirname in database index.js:     ${__dirname}`)
 
 const initOptions = { promiseLib: Promise };
 const pgp = require('pg-promise')(initOptions);
