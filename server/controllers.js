@@ -4,14 +4,6 @@ const hasher = require('pbkdf2-password')();
 const helpers = require('./helpers/helpers');
 const models = require('./models');
 
-// const express = require('express');
-// const server = require('http').Server(app);
-// const io = require('socket.io')(server);
-// const session = require('express-session');
-// const Store = require('connect-pg-simple')(session);
-// const path = require('path');
-// const router = require('./routes.js');
-
 function deleteFromTable(req, res) {
   const params = helpers.getQueryParams(req);
   models.general
@@ -31,6 +23,12 @@ function updateField(req, res) {
 module.exports = {
   signin: {
     post: (req, res) => models.users.get(req.body.username)
+      .tap(results => {
+        req.app.io.once('connection', (socket) => {
+          console.log('New client has connected. 🔥🔥🔥🔥🔥🔥🔥🔥');
+          socket.emit('connection', 'New client has connected. 🔥🔥🔥🔥🔥🔥🔥🔥');
+        });
+      })
       .tap((user) => {
         hasher({ password: req.body.password, salt: user[0].salt }, (err, pass, salt, hash) => {
           if (err) throw err;
@@ -64,7 +62,7 @@ module.exports = {
         .then(() => res.sendStatus(200))
         .catch(error => debug('Error', error)),
 
-    get: (req, res) => models.entries.get(req.query.username)
+    get: (req, res, socket) => models.entries.get(req.query.username)
         .then(results => helpers.sortEntries(results))
         .then(results => res.send(results))
         .catch(error => debug('Error', error)),

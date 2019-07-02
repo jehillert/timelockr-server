@@ -2,6 +2,8 @@
 const router = require('express').Router();
 const auth = require('./helpers/auth');
 const controller = require('./controllers');
+// const app = require('./index');
+// var io = app.getIO(); //your io var
 
 // route-specific middleware
 router.use('/signup', auth.hashPassword);

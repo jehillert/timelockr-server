@@ -10,7 +10,8 @@
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
     "socket.io-client": "^2.2.0",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "ws": "^7.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
