@@ -1,6 +1,6 @@
-const chalk = require('chalk');
-const debug = require('debug')('server:helpers');
-// const debug = require('debug')(chalk.hex('#ff7643').bgHex('#000000')('server:helpers'));
+// const loggers = require('./loggers');
+// const debug = require('debug')(loggers.helpers);
+const debug = require('./loggers')('helpers');
 const moment = require('moment');
 
 const sortEntries = (unsorted) => {

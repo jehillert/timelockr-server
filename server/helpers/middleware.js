@@ -11,7 +11,7 @@ const hashPassword = (req, res, next) => {
     req.body.salt = salt;
     next();
   });
-};
+}
 
 function restrict(req, res, next) {
   if (req.session.user) {

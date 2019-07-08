@@ -24,6 +24,7 @@ server-TUTORIAL.js
 .npm
 .nyc_output
 .prj
+.scripts/
 .vscode/
 .yarn-integrity
 /*.env
@@ -41,6 +42,7 @@ logs
 node_modules/
 npm-debug.log*
 pids
+scripts/
 typings/
 yarn-debug.log*
 yarn-error.log*

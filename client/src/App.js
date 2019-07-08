@@ -14,7 +14,7 @@ const AppContainer = styled.div`
 function App(props) {
   return (
     <AppContainer>
-      <SnackbarProvider dense>
+      <SnackbarProvider dense css='white-space: pre-line;'>
       <CssBaseline />
       <GlobalStyle />
       <NotificationArea />

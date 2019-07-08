@@ -17,7 +17,11 @@ function NotificationArea(props) {
     // connect and listen...
     const socket = io(endpoint);
     socket.on('transmission', data => updateData(data));
-    socket.on('connection', data => updateData(data));
+    socket.on('server request', data => updateData(data));
+    socket.on('database query', data => updateData(data));
+    socket.on('database response', data => updateData(data));
+    socket.on('server response', data => updateData(data));
+    // socket.on('connection', data => updateData(data));
   }, []);
 
   useEffect(() => {
@@ -32,8 +36,6 @@ function NotificationArea(props) {
       })
     }
   }, [enqueueSnackbar, data]);
-  // }, [data]);
-  // });
 
   return (
     <Area />

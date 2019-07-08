@@ -1,7 +1,9 @@
 require('dotenv').config();
 
-const chalk = require('chalk');
-const debug = require('debug')('server');
+// const loggers = require('./helpers/loggers');
+// const debug = require('debug')(loggers.server);
+const debugServer = require('./helpers/loggers')('server');
+const debugSocket = require('./helpers/loggers')('socket');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,11 +11,7 @@ const session = require('express-session');
 const Store = require('connect-pg-simple')(session);
 const path = require('path');
 const router = require('./routes.js');
-
-const app = module.exports = express();  //needed b/c
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
-app.io=io;
+const app = express();
 
 const PORT = process.env.PORT || 5000;
 
@@ -29,8 +27,6 @@ const options = {
   database: process.env.PGDATABASE,
 };
 
-debug('Server Status: %o', 'DEVELOPMENT MODE - Debugging enabled...');
-
 const sessionStore = new Store(options);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -40,22 +36,29 @@ app.use(session({
   store: sessionStore,
   secret: process.env.SESSION_SECRET,
   resave: true,
-  // rolling: true,
   saveUninitialized: true,
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    // domain: 'localhost:8080',
-    // path: '/',
-    // secure: false,
   },
 }));
-
-app.use('/api/db', router);
-app.use(`/api/${process.env.PGDATABASE}`, router);
 
 app.set('port', process.env.PORT);
 app.set('host', '0.0.0.0');
 
-server.listen(app.get('port'), app.get('host'), () => (
-  debug(`Node app started. Listening on port ${process.env.PORT || 5000}`)
+app.use('/api/db', router);
+app.use(`/api/${process.env.PGDATABASE}`, router);
+
+const server = app.listen(app.get('port'), app.get('host'), () => (
+  debugServer(`Node app started. Listening on port ${process.env.PORT || 5000}`)
 ));
+
+const io = require('socket.io')(server);
+app.io=io;
+
+io.on('connection', (socket) => {
+  debugSocket('Client connected...');
+  debugSocket(`CONNECTIONS: ${io.engine.clientsCount}`);
+  socket.on('disconnect', () => {
+    debugSocket('Client disconnected.');
+  });
+});

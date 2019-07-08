@@ -9,14 +9,14 @@ module.exports = {
       .query('INSERT INTO users (username, hash, salt) VALUES ($1, $2, $3) ON CONFLICT (username) DO NOTHING', params)
       .catch(err => console.log(err)),
     delete: params => db
-      .query('DELETE FROM users WHERE user_id = $1', params)
+      .query('DELETE FROM users WHERE username = $1', params)
       .catch(err => console.log(err)),
     update: params => db
       .query('UPDATE users SET $1 = $2 WHERE user_id = $2 ON CONFLICT DO NOTHING', params)
       .catch(err => console.log(err)),
     },
 
-    entries: {
+  entries: {
     get: username => db
       .query('SELECT * FROM entries LEFT JOIN users ON users.user_id = entries.user_id WHERE users.username = $1 ORDER BY entries.release_date ASC', username)
       .catch(err => console.log(err)),
@@ -31,3 +31,10 @@ module.exports = {
       .catch(err => console.log(err)),
   },
 };
+
+
+
+// purgeAccount: username => db
+// .query('DELETE * FROM entries LEFT JOIN users ON users.user_id = entries.user_id WHERE users.username = $1', username)
+//   .then
+// .catch(err => console.log(err)),

@@ -14,10 +14,12 @@
     "ws": "^7.0.1"
   },
   "scripts": {
+    "start-server-ui": "cd scripts && ./start-server-ui.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "run-terminal": "cd scripts && ./run-terminal.sh"
   },
   "eslintConfig": {
     "extends": "react-app"
