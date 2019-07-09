@@ -11,11 +11,11 @@ const Area = styled.div`
 function NotificationArea(props) {
   const [data, updateData] = useState(false);
   const { enqueueSnackbar } = props;
+  const endpoint = process.env.ENDPOINT
 
   useEffect(() => {
     // connect and listen...
-    // const socket = io(process.env.ENDPOINT);
-    const socket = io('https://timelockr-server-demo.herokuapp.com');
+    const socket = io(endpoint);
     socket.on('transmission', data => updateData(data));
     socket.on('server request', data => updateData(data));
     socket.on('database query', data => updateData(data));
