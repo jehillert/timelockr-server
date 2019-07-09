@@ -10,7 +10,7 @@ const Area = styled.div`
 
 function NotificationArea(props) {
   const [data, updateData] = useState(false);
-  const endpoint = 'http://127.0.0.1:5000';
+  const endpoint = process.env.ENDPOINT || 'http://127.0.0.1:5000';
   const { enqueueSnackbar } = props;
 
   useEffect(() => {
