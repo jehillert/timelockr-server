@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-// const loggers = require('./helpers/loggers');
-// const debug = require('debug')(loggers.server);
 const debugServer = require('./helpers/loggers')('server');
 const debugSocket = require('./helpers/loggers')('socket');
 const cors = require('cors');

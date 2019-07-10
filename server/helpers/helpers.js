@@ -1,5 +1,3 @@
-// const loggers = require('./loggers');
-// const debug = require('debug')(loggers.helpers);
 const debug = require('./loggers')('helpers');
 const moment = require('moment');
 

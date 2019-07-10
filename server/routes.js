@@ -1,5 +1,3 @@
-// const loggers = require('./helpers/loggers');
-// const debug = require('debug')(loggers.routes);
 const debug = require('./helpers/loggers')('routes');
 const router = require('express').Router();
 const mddlwr = require('./helpers/middleware');
