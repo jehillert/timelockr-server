@@ -1,4 +1,4 @@
-const debug = require('./loggers')('helpers');
+const debug = require('./loggers')('HELPERS');
 const moment = require('moment');
 
 const sortEntries = (unsorted) => {

@@ -30,7 +30,7 @@ function NotificationArea(props) {
       enqueueSnackbar(data, {
         anchorOrigin: {
             vertical: 'top',
-            horizontal: 'center',
+            horizontal: 'left',
         },
         variant: 'default',
       })

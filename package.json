@@ -38,6 +38,7 @@
     "pbkdf2-password": "^1.2.1",
     "pg-promise": "^8.6.5",
     "socket.io": "^2.2.0",
+    "uuid": "^3.3.2",
     "ws": "^7.0.1"
   },
   "resolutions": {

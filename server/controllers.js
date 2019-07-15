@@ -1,16 +1,18 @@
 const chalk = require('chalk');
-const debug = require('./helpers/loggers')('controllers');
+const debugCtrl = require('./helpers/loggers')('CONTROLLERS');
+const debugSckt = require('./helpers/loggers')('SOCKET');
 const hasher = require('pbkdf2-password')();
 const helpers = require('./helpers/helpers');
 const models = require('./models');
 const Promise = require('bluebird')
+var util = require('util')
 
 function deleteFromTable(req, res) {
   const params = helpers.getQueryParams(req);
   models.general
     .delete(params)
     .then(() => res.sendStatus(201))
-    .catch(error => debug('Error', error));
+    .catch(error => debugCtrl('Error', error));
 }
 
 function updateField(req, res) {
@@ -18,7 +20,7 @@ function updateField(req, res) {
   models.general
     .put(params)
     .then(() => res.sendStatus(201))
-    .catch(error => debug('Error', error));
+    .catch(error => debugCtrl('Error', error));
 }
 
 module.exports = {
@@ -40,17 +42,15 @@ module.exports = {
 
             io.emit(
               'transmission',
-              `Salt generated: ${truncatedSalt}\n
-              Password hash: ${truncatedHash}`
+              `Salt: ${truncatedSalt}\n
+              hash: ${truncatedHash}`
             );
 
-            io.emit(
-              'transmission',
-              `Cookie:\n\n${req.headers.cookie}`
-            );
+          io.emit('transmission',`Cookie:\n\n${JSON.stringify(req.session.cookie)}`);
+          io.emit('transmission',`req.sessionID:\n\n${JSON.stringify(req.sessionID)}`);
 
           if (err) throw err;
-          if (hash !== user[0].hash) debug(chalk.hex('#ff7643')('Invalid password.'));
+          if (hash !== user[0].hash) debugCtrl(chalk.hex('#ff7643')('Invalid password.'));
 
           req.session.regenerate(() => {
             req.session.user = user;
@@ -58,27 +58,33 @@ module.exports = {
           });
         });
       })
+      .tap(() => req.app.io.emit('transmission',`res.req.sessionID:\n\n${JSON.stringify(res.req.sessionID)}`))
+      // .tap(results => debugCtrl('\n\nRESPONSE:\n\n%O', JSON.stringify(res)))
       .then(user => res.status(202).send({ userId: user[0].user_id }))
-      .catch(error => debug('Error', error)),
+      .catch(error => debugCtrl('Error', error)),
   },
+
+  // logout: {
+  //   get: (req, res) => {
+  //     req.app.io.emit('transmission', `User has logged out.`);
+  //     req.session.data = null;
+  //     return res.status(200).json();
+  //   }
+  // },
 
   logout: {
-    get: (req, res) => req.session.destroy()
-      .then(() => res.status(200).json({ message: 'Logout successful.' }))
-      .catch(error => debug('Error', error)),
+    get: (req, res) => {
+      req.session.destroy(function(err) {
+        if (err) {
+          return res.status(500).json('Error: ${err}');
+        }
+      debugCtrl('\n\nRESPONSE:\n\n%O', res);
+      req.app.io.emit('transmission', `User has logged out.`);
+      req.app.io.emit('transmission', `res.req.sessionID: ${res.req.sessionID}`);
+      return res.status(200).json({ message: 'Logout successful.' });
+      });
+    }
   },
-
-  // purgeAccount: {
-  //   delete: (req, res) => models.users
-  //     .delete(req.body.username)
-  //     .tap(() => {
-  //       req.app.io.emit('transmission',`Deleting all entries for user ${req.body.username}`);
-  //     })
-  //     .then(() => res.sendStatus(200))
-  //     .catch(error => debug('Error', error)),
-  //   delete: (req, res) => deleteFromTable(req, res),
-
-  // }
 
   users: {
     put: (req, res) => updateField(req, res),
@@ -89,24 +95,27 @@ module.exports = {
     delete: (req, res) => models.entries
         .delete(req.body.entryId)
         .tap(() => {
-          req.app.io.emit('transmission',`Deleting Entry No. ${req.body.entryId} from database.`);
+          req.app.io.emit('transmission',`Processed 'delete' request for Entry No. ${req.body.entryId} from database.`);
         })
         .then(() => res.sendStatus(200))
-        .catch(error => debug('Error', error)),
+        .catch(error => debugCtrl('Error', error)),
 
     get: (req, res) => models.entries.get(req.query.username)
         .then(results => helpers.sortEntries(results))
         .then(results => res.send(results))
-        .catch(error => debug('Error', error)),
-        // .tap(results => debug('\n\nRESPONSE:\n\n%O', res))
-        // .tap(results => debug('\n\nEntries - UNSORTED:\n\n%O', results))
+        .catch(error => debugCtrl('Error', error)),
+        // .tap(results => debugCtrl('\n\nRESPONSE:\n\n%O', res))
+        // .tap(results => debugCtrl('\n\nEntries - UNSORTED:\n\n%O', results))
 
     put: (req, res) => models.entries.update([
         req.body.data.releaseDate,
         req.body.data.entryId,
     ])
+      .tap(() => {
+        req.app.io.emit('transmission', `Processed 'put' request to extend release date of Entry No. ${req.body.entryId} to: ${req.body.data.releaseDate}.`)
+      })
       .then(() => res.sendStatus(201))
-      .catch(error => debug('Error', error)),
+      .catch(error => debugCtrl('Error', error)),
 
     post: (req, res) => models.entries.post([
       req.body.userId,
@@ -116,7 +125,7 @@ module.exports = {
       req.body.content,
     ])
       .then(() => res.sendStatus(201))
-      .catch(error => debug('Error', error)),
+      .catch(error => debugCtrl('Error', error)),
   },
 
   signup: {
@@ -127,9 +136,9 @@ module.exports = {
         req.body.salt,
       ])
       .tap(() => {
-        debug(req.body.username);
-        debug(req.body.hash);
-        debug(req.body.salt);
+        debugCtrl(req.body.username);
+        debugCtrl(req.body.hash);
+        debugCtrl(req.body.salt);
       })
       .then(() => res.sendStatus(201))
       .catch(() => res.sendStatus(409)),

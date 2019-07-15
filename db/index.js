@@ -1,7 +1,4 @@
-// const loggers = require('../server/helpers/loggers');
-// const debug = require('debug')(loggers.database);
-// const debug = require('../server/helpers/loggers')('database');
-const debug = require('../server/helpers/loggers')('database');
+const debug = require('../server/helpers/loggers')('DATABASE');
 const Promise = require('bluebird');
 
 // console.log(`__dirname in database index.js:     ${__dirname}`)

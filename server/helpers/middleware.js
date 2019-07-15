@@ -1,4 +1,4 @@
-const debug = require('debug')('server:auth');
+const debug = require('debug')('MIDDLEWARE');
 const chalk = require('chalk');
 const hasher = require('pbkdf2-password')();
 

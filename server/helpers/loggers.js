@@ -39,22 +39,22 @@ module.exports = function (loggerId, fg, bg) {
   // assign default font color if user does not specify one
   if (!fg) {
     switch (loggerId) {
-      case 'controllers':
+      case 'CONTROLLERS':
         fg = '#D0FF00';
         break;
-      case 'database':
+      case 'DATABASE':
         fg = '#0a93ff';
         break;
-      case 'helpers':
+      case 'HELPERS':
         fg = '#ff7643';
         break;
-      case 'models':
+      case 'MODELS':
         fg = '#0a93ff';
         break;
-      case 'server':
+      case 'SERVER':
         fg = '#D0FF00';
         break;
-      case 'routes':
+      case 'ROUTES':
         fg = '#FF00EE';
         break;
       default:

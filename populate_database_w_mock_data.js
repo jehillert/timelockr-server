@@ -6,11 +6,11 @@
       dbname=postgres
       host=localhost
       port=5432
-      user=jhillert
+      user=jeh
       password=1445
 
   • Users should be logging in under user credentials,
-    not with 'jhillert'
+    not with 'jeh'
 
   • Dev server needs to be running
 */

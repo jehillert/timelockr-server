@@ -17,7 +17,7 @@
     psql service=tldb<schema.sql
 */
 
-\c postgres jhillert
+\c postgres jeh
 DROP DATABASE IF EXISTS db;
 CREATE DATABASE db;
 

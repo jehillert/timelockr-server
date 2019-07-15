@@ -3,6 +3,7 @@ import GlobalStyle from './style/GlobalStyle.js'
 import NotificationArea from './components/NotificationArea'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { SnackbarProvider } from 'notistack';
+import { StylesProvider } from '@material-ui/styles';
 import styled from 'styled-components';
 
 const AppContainer = styled.div`
@@ -10,15 +11,16 @@ const AppContainer = styled.div`
   height: 100vh;
   background-color: #252525;
 `;
-
 function App(props) {
   return (
     <AppContainer>
-      <SnackbarProvider dense css='white-space: pre-line;'>
       <CssBaseline />
       <GlobalStyle />
-      <NotificationArea />
-      </SnackbarProvider>
+        <StylesProvider injectFirst>
+        <SnackbarProvider maxSnack={5} dense css='white-space: pre-line;'>
+          <NotificationArea />
+        </SnackbarProvider>
+        </StylesProvider>
     </AppContainer>
   );
 }

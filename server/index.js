@@ -1,7 +1,6 @@
 require('dotenv').config();
-
-const debugServer = require('./helpers/loggers')('server');
-const debugSocket = require('./helpers/loggers')('socket');
+const debugServer = require('./helpers/loggers')('SERVER');
+const debugSocket = require('./helpers/loggers')('SOCKET');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -33,12 +32,17 @@ app.use(cors());
 app.use(session({
   store: sessionStore,
   secret: process.env.SESSION_SECRET,
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000,
   },
 }));
+
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
 
 app.set('port', process.env.PORT);
 app.set('host', '0.0.0.0');
