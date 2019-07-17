@@ -39,10 +39,10 @@ app.use(session({
   },
 }));
 
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  sess.cookie.secure = true // serve secure cookies
-}
+// if (app.get('env') === 'production') {
+//   app.set('trust proxy', 1) // trust first proxy
+//   sess.cookie.secure = true // serve secure cookies
+// }
 
 app.set('port', process.env.PORT);
 app.set('host', '0.0.0.0');
