@@ -59,7 +59,7 @@ module.exports = {
         });
       })
       .tap(() => req.app.io.emit('transmission',`res.req.sessionID:\n\n${JSON.stringify(res.req.sessionID)}`))
-      // .tap(results => debugCtrl('\n\nRESPONSE:\n\n%O', JSON.stringify(res)))
+      .tap(results => debugCtrl('\n\nRESPONSE:\n\n%j', JSON.stringify(res)))
       .then(user => res.status(202).send({ userId: user[0].user_id }))
       .catch(error => debugCtrl('Error', error)),
   },
