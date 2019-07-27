@@ -1,20 +1,26 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# env
+.env
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+
 # business logic
 fake-credentials.data
-GenFakeCredsAndData.js
-server-TUTORIAL.js
 
 # everything else
+*.code-workspace
 *.log
 *.pid
 *.pid.lock
 *.seed
 *.sublime-project
 *.sublime-workspace
-*.code-workspace
 *.tgz
 .bit/
 .DS_Store
-.env
 .eslintcache
 .favorites.json
 .grunt
@@ -23,16 +29,19 @@ server-TUTORIAL.js
 .node_repl_history
 .npm
 .nyc_output
+.pnp.js
 .prj
 .scripts/
 .vscode/
 .yarn-integrity
 /*.env
+/.pnp
+/coverage
+/node_modules
 bookmarks.json
 bower_components
 build/
 build/Release
-config.js
 coverage
 dist/
 jspm_packages/

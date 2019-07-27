@@ -1,4 +1,4 @@
-const debug = require('./helpers/loggers')('ROUTES');
+// const debug = require('./helpers/loggers')('ROUTES');
 const router = require('express').Router();
 const mddlwr = require('./helpers/middleware');
 const controllers = require('./controllers');

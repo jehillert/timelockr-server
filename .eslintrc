@@ -8,10 +8,8 @@
   "plugins": [
     "react-hooks"
   ],
-  "settings": {
-    "import/resolver": "webpack"
-  },
   "rules": {
+    "strict": 0,
     "no-console": "off",
     "indent": "off",
     "jsx-quotes": [

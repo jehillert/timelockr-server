@@ -1,11 +1,9 @@
+// const debugSckt = require('./helpers/loggers')('SOCKET');
 const chalk = require('chalk');
-const debugCtrl = require('./helpers/loggers')('CONTROLLERS');
-const debugSckt = require('./helpers/loggers')('SOCKET');
 const hasher = require('pbkdf2-password')();
+const debugCtrl = require('./helpers/loggers')('CONTROLLERS');
 const helpers = require('./helpers/helpers');
 const models = require('./models');
-const Promise = require('bluebird')
-var util = require('util')
 
 function deleteFromTable(req, res) {
   const params = helpers.getQueryParams(req);
@@ -28,26 +26,25 @@ module.exports = {
     post: (req, res) => models.users.get(req.body.username)
       .tap((user) => {
           hasher({ password: req.body.password, salt: user[0].salt }, (err, pass, salt, hash) => {
+            const truncatedSalt = `${salt.slice(0, 10)} ...`;
+            const truncatedHash = `${hash.slice(0, 10)} ...`;
 
-            const truncatedSalt = salt.slice(0, 10) + '...';
-            const truncatedHash = hash.slice(0, 10) + '...';
-
-            var io = req.app.io;
+            const { io } = req.app;
 
             io.emit(
               'transmission',
               `Username: ${req.body.username}\n
-              Password: ${req.body.password}`
+              Password: ${req.body.password}`,
             );
 
             io.emit(
               'transmission',
               `Salt: ${truncatedSalt}\n
-              hash: ${truncatedHash}`
+              hash: ${truncatedHash}`,
             );
 
-          io.emit('transmission',`Cookie:\n\n${JSON.stringify(req.session.cookie)}`);
-          io.emit('transmission',`req.sessionID:\n\n${JSON.stringify(req.sessionID)}`);
+          io.emit('transmission', `Cookie:\n\n${JSON.stringify(req.session.cookie)}`);
+          io.emit('transmission', `req.sessionID:\n\n${JSON.stringify(req.sessionID)}`);
 
           if (err) throw err;
           if (hash !== user[0].hash) debugCtrl(chalk.hex('#ff7643')('Invalid password.'));
@@ -58,7 +55,7 @@ module.exports = {
           });
         });
       })
-      .tap(() => req.app.io.emit('transmission',`res.req.sessionID:\n\n${JSON.stringify(res.req.sessionID)}`))
+      .tap(() => req.app.io.emit('transmission', `res.req.sessionID:\n\n${JSON.stringify(res.req.sessionID)}`))
       .then(user => res.status(202).send({ userId: user[0].user_id }))
       .catch(error => debugCtrl('Error', error)),
   },
@@ -74,16 +71,16 @@ module.exports = {
 
   logout: {
     get: (req, res) => {
-      req.session.destroy(function(err) {
+      req.session.destroy((err) => {
         if (err) {
-          return res.status(500).json('Error: ${err}');
+          return res.status(500).json(`Error: ${err}`);
         }
       debugCtrl('\n\nRESPONSE:\n\n%O', res);
-      req.app.io.emit('transmission', `User has logged out.`);
+      req.app.io.emit('transmission', 'User has logged out.');
       req.app.io.emit('transmission', `res.req.sessionID: ${res.req.sessionID}`);
       return res.status(200).json({ message: 'Logout successful.' });
       });
-    }
+    },
   },
 
   users: {
@@ -95,7 +92,7 @@ module.exports = {
     delete: (req, res) => models.entries
         .delete(req.body.entryId)
         .tap(() => {
-          req.app.io.emit('transmission',`Processed 'delete' request for Entry No. ${req.body.entryId} from database.`);
+          req.app.io.emit('transmission', `Processed 'delete' request for Entry No. ${req.body.entryId} from database.`);
         })
         .then(() => res.sendStatus(200))
         .catch(error => debugCtrl('Error', error)),
@@ -111,9 +108,10 @@ module.exports = {
         req.body.data.releaseDate,
         req.body.data.entryId,
     ])
-      .tap(() => {
-        req.app.io.emit('transmission', `Processed 'put' request to extend release date of Entry No. ${req.body.entryId} to: ${req.body.data.releaseDate}.`)
-      })
+      .tap(() => req.app.io.emit(
+        'transmission',
+        `Processed 'put' request to extend release date of Entry No. ${req.body.entryId} to: ${req.body.data.releaseDate}.`,
+      ))
       .then(() => res.sendStatus(201))
       .catch(error => debugCtrl('Error', error)),
 

@@ -1,5 +1,4 @@
-const debug = require('debug')('MIDDLEWARE');
-const chalk = require('chalk');
+// const debug = require('debug')('MIDDLEWARE');
 const hasher = require('pbkdf2-password')();
 
 const hashPassword = (req, res, next) => {
@@ -11,7 +10,7 @@ const hashPassword = (req, res, next) => {
     req.body.salt = salt;
     next();
   });
-}
+};
 
 function restrict(req, res, next) {
   if (req.session.user) {

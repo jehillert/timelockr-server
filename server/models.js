@@ -31,10 +31,3 @@ module.exports = {
       .catch(err => console.log(err)),
   },
 };
-
-
-
-// purgeAccount: username => db
-// .query('DELETE * FROM entries LEFT JOIN users ON users.user_id = entries.user_id WHERE users.username = $1', username)
-//   .then
-// .catch(err => console.log(err)),

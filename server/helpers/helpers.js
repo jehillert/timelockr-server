@@ -1,5 +1,5 @@
-const debug = require('./loggers')('HELPERS');
 const moment = require('moment');
+const debug = require('./loggers')('HELPERS');
 
 const sortEntries = (unsorted) => {
   // Database dates are UTC.
@@ -12,7 +12,7 @@ const sortEntries = (unsorted) => {
   const todayInISO = new Date().toISOString();
   const present = moment().unix();
 
-  for (const entry of unsorted) {
+  unsorted.forEach((entry) => {
     const { content, description } = entry;
     const entryId = entry.entry_id;
     const creationDate = entry.creation_date;
@@ -43,7 +43,8 @@ const sortEntries = (unsorted) => {
 
       locked.push(lockedEntry);
     }
-  }
+  });
+
   debug('\n\nLocked Entries - SORTED\n\n%O', entries.locked);
   debug('\n\nReleased Entries - SORTED\n\n%O', entries.released);
   debug('\n\n');

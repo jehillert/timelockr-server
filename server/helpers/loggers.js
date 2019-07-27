@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /*
   Input:
     loggerId (string) -
@@ -23,56 +24,61 @@
 
 const chalk = require('chalk');
 
-module.exports = function (loggerId, fg, bg) {
-  let logger;
-
-  let p; // primary coloring
-  let s; // secondary coloring
-
+module.exports = (loggerId, fg, bg) => {
   const fgDefault = '#B2AF9D';
   const bgDefault = '#000000';
 
   const arrow = '>>>';
-  const border = '│'
+  const border = '│';
   const label = loggerId.toUpperCase();
+
+  let fgfc;
+  let bgfc;
+
+  if (fg) {
+    fgfc = fg;
+  }
+
+  if (bg) {
+    bgfc = bg;
+  }
 
   // assign default font color if user does not specify one
   if (!fg) {
     switch (loggerId) {
       case 'CONTROLLERS':
-        fg = '#D0FF00';
+        fgfc = '#D0FF00';
         break;
       case 'DATABASE':
-        fg = '#0a93ff';
+        fgfc = '#0a93ff';
         break;
       case 'HELPERS':
-        fg = '#ff7643';
+        fgfc = '#ff7643';
         break;
       case 'MODELS':
-        fg = '#0a93ff';
+        fgfc = '#0a93ff';
         break;
       case 'SERVER':
-        fg = '#D0FF00';
+        fgfc = '#D0FF00';
         break;
       case 'ROUTES':
-        fg = '#FF00EE';
+        fgfc = '#FF00EE';
         break;
       default:
-        fg = fgDefault;
+        fgfc = fgDefault;
     }
   }
 
   // assign background color if user does not specify one
   if (!bg) {
-    bg = bgDefault
+    bgfc = bgDefault;
   }
 
-  p = chalk.hex(fg).bgHex(bg);
-  s = chalk.white.bgHex(bg);
-  // arrow = chalk.white.bgHex(bg)(' >>> ');
-  // logger = chalk.hex(fg).bgHex(bg)(label) + arrow;
-  logger = p(`${border} ${label}`) + s(` ${arrow} `) + p(border);
+  const p = chalk.hex(fgfc).bgHex(bgfc);
+  const s = chalk.white.bgHex(bgfc);
+  // arrow = chalk.white.bgHex(bgfc)(' >>> ');
+  // logger = chalk.hex(fgfc).bgHex(bgfc)(label) + arrow;
+  const logger = p(`${border} ${label}`) + s(` ${arrow} `) + p(border);
 
   return require('debug')(logger);
-
-}
+};

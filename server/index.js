@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 require('dotenv').config();
 const debugServer = require('./helpers/loggers')('SERVER');
 const debugSocket = require('./helpers/loggers')('SOCKET');
@@ -8,20 +9,27 @@ const session = require('express-session');
 const Store = require('connect-pg-simple')(session);
 const path = require('path');
 const router = require('./routes.js');
+const {
+  pgDatabase,
+  pgHost,
+  pgPassword,
+  pgPort,
+  pgUser,
+  port,
+  sessionSecret,
+} = require('../config');
+
+// Serve static files from React app
 const app = express();
-
-const PORT = process.env.PORT || 5000;
-
-// Serve static files from the React app
 app.use(express.static(path.join(__dirname, '/../client/build')));
 
 // session
 const options = {
-  host: process.env.PGHOST,
-  port: process.env.PGPORT || 5432,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
+  host: pgHost,
+  port: pgPort,
+  user: pgUser,
+  password: pgPassword,
+  database: pgDatabase,
 };
 
 const sessionStore = new Store(options);
@@ -31,7 +39,7 @@ app.use(cors());
 
 app.use(session({
   store: sessionStore,
-  secret: process.env.SESSION_SECRET,
+  secret: sessionSecret,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -44,18 +52,19 @@ app.use(session({
 //   sess.cookie.secure = true // serve secure cookies
 // }
 
-app.set('port', process.env.PORT);
+app.set('port', port);
 app.set('host', '0.0.0.0');
 
 app.use('/api/db', router);
-app.use(`/api/${process.env.PGDATABASE}`, router);
+app.use(`/api/${pgDatabase}`, router);
 
 const server = app.listen(app.get('port'), app.get('host'), () => (
-  debugServer(`Node app started. Listening on port ${process.env.PORT || 5000}`)
+  debugServer(`Node app started. Listening on port ${port}`)
 ));
 
 const io = require('socket.io')(server);
-app.io=io;
+
+app.io = io;
 
 io.on('connection', (socket) => {
   debugSocket('Client connected...');

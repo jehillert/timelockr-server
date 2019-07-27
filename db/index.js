@@ -1,29 +1,42 @@
-const debug = require('../server/helpers/loggers')('DATABASE');
+/* eslint-disable key-spacing */
 const Promise = require('bluebird');
-
-// console.log(`__dirname in database index.js:     ${__dirname}`)
 
 const initOptions = { promiseLib: Promise };
 const pgp = require('pg-promise')(initOptions);
+const debug = require('../server/helpers/loggers')('DATABASE');
+const {
+  nodeEnv,
+  databaseUrl,
+  pgDatabase,
+  pgHost,
+  pgIdleTimeoutMilliS,
+  pgMax,
+  pgPassword,
+  pgPort,
+  pgSslMode,
+  pgUser,
+} = require('../config');
+// console.log(`__dirname in database index.js:     ${__dirname}`)
 
-if (process.env.NODE_ENV === 'development') {
-  const config = {
-    user               : process.env.PGUSER,
-    password           : process.env.PGPASSWORD,
-    database           : process.env.PGDATABASE || 'db',
-    host               : process.env.PGHOST || 'localhost',
-    port               : process.env.PGPORT || 5432,
-    max                : process.env.PG_MAX || 100,
-    idleTimeoutMillis  : process.env.PG_IDLETIMEOUTMILLIS || 30000,
-    ssl                : process.env.PG_SSL || true,
+
+if (nodeEnv === 'development') {
+  const pgConfig = {
+    user               : pgUser,
+    password           : pgPassword,
+    database           : pgDatabase,
+    host               : pgHost,
+    port               : pgPort,
+    max                : pgMax,
+    idleTimeoutMillis  : pgIdleTimeoutMilliS,
+    ssl                : pgSslMode,
   };
 
-  debug(config);
-  const db = pgp(config);
+  debug(pgConfig);
+  const db = pgp(pgConfig);
 
   module.exports = db;
 } else {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = databaseUrl;
   const db = pgp(connectionString);
 
   module.exports = db;

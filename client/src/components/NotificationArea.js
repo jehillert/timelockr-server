@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { withSnackbar } from 'notistack';
+import { endpoint } from '../config';
 import styled from 'styled-components';
 
 const Area = styled.div`
@@ -11,7 +12,6 @@ const Area = styled.div`
 function NotificationArea(props) {
   const [data, updateData] = useState(false);
   const { enqueueSnackbar } = props;
-  const endpoint = process.env.ENDPOINT
 
   useEffect(() => {
     // connect and listen...
@@ -21,7 +21,7 @@ function NotificationArea(props) {
     socket.on('database query', data => updateData(data));
     socket.on('database response', data => updateData(data));
     socket.on('server response', data => updateData(data));
-    // socket.on('connection', data => updateData(data));
+    socket.on('connection', data => updateData(data));
   }, []);
 
   useEffect(() => {
