@@ -36,6 +36,7 @@ const sessionStore = new Store(options);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+app.enable('trust proxy');
 
 app.use(session({
   store: sessionStore,

@@ -6,22 +6,37 @@ import { SnackbarProvider } from 'notistack';
 import { StylesProvider } from '@material-ui/styles';
 import styled from 'styled-components';
 
-const AppContainer = styled.div`
+const S = {};
+
+S.AppContainer = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: #252525;
 `;
+
+S.SnackbarProvider = styled(SnackbarProvider)`
+  white-space: pre-line;
+`;
+
 function App(props) {
   return (
-    <AppContainer>
+    <S.AppContainer>
       <CssBaseline />
       <GlobalStyle />
         <StylesProvider injectFirst>
-        <SnackbarProvider maxSnack={5} dense css='white-space: pre-line;'>
+        <S.SnackbarProvider
+          maxSnack={7}
+          dense
+          hideIconVariant={true}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
           <NotificationArea />
-        </SnackbarProvider>
+        </S.SnackbarProvider>
         </StylesProvider>
-    </AppContainer>
+    </S.AppContainer>
   );
 }
 
