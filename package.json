@@ -12,7 +12,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/jehillert/timelockr-server-demo"
+    "url": "https://github.com/jehillert/timelockr-server"
   },
   "scripts": {
     "start-dev-server": "cd scripts && ./start-dev-server.sh",
