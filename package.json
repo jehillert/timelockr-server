@@ -16,8 +16,10 @@
   },
   "scripts": {
     "start-dev-server": "cd scripts && ./start-dev-server.sh",
-    "start": "node server/index.js",
-    "dev-server": "nodemon localhost 5000 --ignore node_modules --inspect server",
+    "start": "nodemon localhost 5000 --ignore node_modules --inspect server",
+    "repopulate": "cd scripts && ./repopulate.sh",
+    "export": "cd scripts && ./export.sh",
+    "import": "cd scripts && ./import.sh",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "run-terminal": "cd scripts && ./run-terminal.sh"
   },
