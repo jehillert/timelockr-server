@@ -82,4 +82,4 @@ function NotificationArea(props) {
 }
 
 // export default NotificationArea;
-export default withSnackbar(NotificationArea);
+export default React.memo(withSnackbar(NotificationArea));
