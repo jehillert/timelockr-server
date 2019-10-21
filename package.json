@@ -28,7 +28,7 @@
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "chalk": "^2.4.2",
-    "connect-pg-simple": "^5.0.0",
+    "connect-pg-simple": "^6.0.1",
     "cors": "^2.8.5",
     "debug": "^4.1.1",
     "dotenv": "^8.0.0",
